@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SAT.UI.MVC.Data;
+using SAT.UI.MVC.Models;
 
 namespace SAT.UI.MVC;
 public class Program {
@@ -11,7 +12,8 @@ public class Program {
 		var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 		builder.Services.AddDbContext<ApplicationDbContext>(options =>
 			options.UseSqlServer(connectionString));
-		builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        builder.Services.AddDbContext < SatContext> (options =>options.UseSqlServer(connectionString));
+        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 		builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 			.AddRoles<IdentityRole>()
