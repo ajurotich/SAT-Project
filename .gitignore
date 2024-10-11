@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/CAA SAT/SAT.UI.MVC/appsettings.json
