@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SAT.UI.MVC.Models;
+namespace SAT.Data.EF.Models;
 
 public partial class Course
 {

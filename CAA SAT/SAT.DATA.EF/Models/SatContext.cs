@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace SAT.UI.MVC.Models;
+namespace SAT.Data.EF.Models;
 
 public partial class SatContext : DbContext
 {
