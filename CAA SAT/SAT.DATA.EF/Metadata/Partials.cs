@@ -1,12 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SAT.DATA.EF.Models
-{
-    internal class Partials
-    {
-    }
+
+namespace SAT.Data.EF.Models;
+
+[ModelMetadataType(typeof(StudentMetadata))]
+public partial class Student{
+
+	[NotMapped]
+	public string FullName => $"{FirstName} {LastName}";
+
+}
+
+[ModelMetadataType(typeof(ScheduledClassMetadata))]
+public partial class ScheduledClass {
+
+	[NotMapped]
+	public string FullCourseName => $"{Course.CourseName} | {Location}";
+
 }
