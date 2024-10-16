@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SAT.Data.EF.Models;
 using SAT.UI.MVC.Utilities;
 using System.Drawing;
+using System.Text.Json;
 
 namespace SAT.UI.MVC.Controllers {
 	public class StudentsController : Controller {
@@ -203,9 +204,10 @@ namespace SAT.UI.MVC.Controllers {
 					await _context.SaveChangesAsync();
 				}
 				catch(DbUpdateConcurrencyException) {
-					if(!StudentExists(student.StudentId)) 
+					if(!StudentExists(student.StudentId))
 						return NotFound();
-					else throw;
+					else
+						throw;
 				}
 				return RedirectToAction(nameof(Index));
 			}
@@ -226,20 +228,43 @@ namespace SAT.UI.MVC.Controllers {
 				return NotFound();
 			}
 
+			ViewData["Ssid"] = new SelectList(_context.StudentStatuses, "Ssid", "Ssname", student.Ssid);
 			return View(student);
 		}
 
 		// POST: Students/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id) {
-			var student = await _context.Students.FindAsync(id);
+		public async Task<IActionResult> Delete(int id, Student partialStudent) {
+			/*var student = await _context.Students.FindAsync(id);
 			if(student != null) {
 				_context.Students.Remove(student);
 			}
 
 			await _context.SaveChangesAsync();
+			return RedirectToAction(nameof(Index));*/
+
+			ViewData["Ssid"] = new SelectList(_context.StudentStatuses, "Ssid", "Ssname", partialStudent.Ssid);
+
+			if(id != partialStudent.StudentId) {
+				return NotFound();
+			}
+
+			var student = await _context.Students.FindAsync(id);
+			student.Ssid = partialStudent.Ssid;
+
+			try {
+				_context.Update(student);
+				await _context.SaveChangesAsync();
+			}
+			catch(DbUpdateConcurrencyException) {
+				if(!StudentExists(student.StudentId))
+					return NotFound();
+				else
+					throw;
+			}
 			return RedirectToAction(nameof(Index));
+
 		}
 
 		private bool StudentExists(int id) {
