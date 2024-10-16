@@ -1,41 +1,71 @@
 ﻿@model IEnumerable<SAT.Data.EF.Models.StudentStatus>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+	<a class="btn btn-primary" asp-action="Create">Create New</a>
+	<div class="btn-group" role="group">
+		<button type="button" id="tilesbtn" class="btn btn-info">Tiles</button>
+		<button type="button" id="tablebtn" class="btn btn-info">Table</button>
+	</div>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Ssname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ssdescription)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ssname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ssdescription)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Ssid">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Ssid">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Ssid">Delete</a>
-            </td>
-        </tr>
+
+<div id="tiles" class="row">
+	@foreach(var item in Model) {
+		<div class="card" style="width: 18rem;">
+			<div class="card-body">
+				<h5 class="card-title">@Html.DisplayFor(modelItem => item.Ssname)</h5>
+				<p class="card-text d-flex flex-column">@Html.DisplayFor(modelItem => item.Ssdescription)</p>
+				<div class="btn-group" role="group">
+					<a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Ssid">Edit</a>
+					<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Ssid">Delete</a>
+				</div>
+			</div>
+		</div>
+	}
+</div>
+
+<div id="table" class="d-none">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>@Html.DisplayNameFor(model => model.Ssname)</th>
+				<th>@Html.DisplayNameFor(model => model.Ssdescription)</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var item in Model) {
+				<tr>
+					<td>@Html.DisplayFor(modelItem => item.Ssname)</td>
+					<td>@Html.DisplayFor(modelItem => item.Ssdescription)</td>
+					<td>
+						<a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Ssid">Edit</a>
+						<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Ssid">Delete</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+@section Scripts {
+	<script>
+
+		$('#tilesbtn').on('click', function () {
+			$('#tiles').removeClass('d-none');
+			$('#table').addClass('d-none');
+		})
+
+		$('#tablebtn').on('click', function () {
+			$('#table').removeClass('d-none');
+			$('#tiles').addClass('d-none');
+		})
+
+	</script>
+
 }
-    </tbody>
-</table>
