@@ -244,7 +244,7 @@ namespace SAT.UI.MVC.Controllers {
 			await _context.SaveChangesAsync();
 			return RedirectToAction(nameof(Index));*/
 
-			ViewData["Ssid"] = new SelectList(_context.StudentStatuses, "Ssid", "Ssname", partialStudent.Ssid);
+			
 
 			if(id != partialStudent.StudentId) {
 				return NotFound();

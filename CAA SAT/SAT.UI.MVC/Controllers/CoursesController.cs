@@ -106,20 +106,37 @@ namespace SAT.UI.MVC.Controllers {
 			if(course == null) {
 				return NotFound();
 			}
+            
 
-			return View(course);
+            return View(course);
 		}
 
 		// POST: Courses/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id) {
-			var course = await _context.Courses.FindAsync(id);
-			if(course != null) {
-				_context.Courses.Remove(course);
-			}
+		public async Task<IActionResult> Delete(int id) {
 
-			await _context.SaveChangesAsync();
+			var course = await _context.Courses.FindAsync(id);
+			if (course == null) {
+				return NotFound();
+			}
+            course.IsActive = false;
+
+            try
+            {
+                _context.Update(course);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CourseExists(course.CourseId))
+                    return NotFound();
+                else
+                    throw;
+            }
+            return RedirectToAction(nameof(Index));
+
+            await _context.SaveChangesAsync();
 			return RedirectToAction(nameof(Index));
 		}
 

@@ -21,7 +21,15 @@ public class Program {
 			.AddEntityFrameworkStores<ApplicationDbContext>();
 		builder.Services.AddControllersWithViews();
 
-		var app = builder.Build();
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(10);// duration a session is stored in memory (default is 20min)
+            options.Cookie.HttpOnly = true; // Allows us to set cookie options over nonHTTPS secure connections
+            options.Cookie.IsEssential = true; // cannot be declined for session to work
+        }
+		);
+
+        var app = builder.Build();
 
 		// Configure the HTTP request pipeline.
 		if(app.Environment.IsDevelopment()) {
@@ -38,7 +46,9 @@ public class Program {
 
 		app.UseRouting();
 
-		app.UseAuthorization();
+        app.UseSession();
+
+        app.UseAuthorization();
 
 		app.MapControllerRoute(
 			name: "default",
